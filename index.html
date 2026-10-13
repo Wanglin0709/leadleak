@@ -1,0 +1,769 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create clear, evidence-based website conversion audits with LeadLeak.">
+  <title>LeadLeak — Website Conversion Audits</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #111a2e;
+      --panel2: #172238;
+      --border: #28364f;
+      --text: #eef3ff;
+      --muted: #9baac4;
+      --accent: #8b9dff;
+      --green: #70e0b0;
+      --red: #ff8f9b;
+      --yellow: #ffd27a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .tag {
+      color: var(--muted);
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+
+    .hero {
+      padding: 54px 0 30px;
+      max-width: 760px;
+    }
+
+    .eyebrow {
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-size: clamp(34px, 6vw, 58px);
+      line-height: 1.08;
+      letter-spacing: -2px;
+      margin: 14px 0;
+    }
+
+    h1 span { color: var(--accent); }
+
+    .intro {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 620px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+      padding: 12px 0 50px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      min-width: 0;
+    }
+
+    h2 { font-size: 19px; margin: 0 0 5px; }
+    h3 { font-size: 15px; margin: 0 0 12px; }
+
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 0 22px;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 7px;
+      color: #dbe4f7;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: #0b1324;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 76px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .button {
+      border: 0;
+      background: var(--accent);
+      color: #0b1020;
+      font-weight: 800;
+      border-radius: 9px;
+      padding: 12px 16px;
+    }
+
+    .button:hover { filter: brightness(1.08); }
+
+    .button.secondary {
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+    }
+
+    .button.danger {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--red);
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .button.full { width: 100%; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .notice {
+      background: #151f35;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-top: 18px;
+    }
+
+    .findings {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .finding {
+      border: 1px solid var(--border);
+      background: #0d1527;
+      border-radius: 11px;
+      padding: 15px;
+    }
+
+    .finding-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .finding-title { font-weight: 750; overflow-wrap: anywhere; }
+
+    .severity {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    .high { color: var(--red); background: #3a202d; }
+    .medium { color: var(--yellow); background: #392f1d; }
+    .low { color: var(--green); background: #17372f; }
+
+    .finding p {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 10px 0 0;
+      overflow-wrap: anywhere;
+    }
+
+    .finding strong { color: #dbe4f7; }
+
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 24px 12px;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .report-head {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+
+    .report-url {
+      color: var(--accent);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin: 18px 0 24px;
+    }
+
+    .stat {
+      background: var(--panel2);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .report-section { margin: 24px 0; }
+
+    .report-section p, .report-section li {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .report-section li { margin-bottom: 9px; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      padding: 20px 0 32px;
+      font-size: 12px;
+    }
+
+    #status {
+      font-size: 12px;
+      color: var(--green);
+      min-height: 20px;
+      margin-top: 10px;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 760px) {
+      .layout { grid-template-columns: 1fr; }
+      .hero { padding-top: 36px; }
+      .panel { padding: 18px; }
+      .nav { align-items: start; }
+      .tag { font-size: 10px; }
+    }
+
+    @media print {
+      body { background: white; color: #172033; }
+      header, .hero, #editor, footer, .no-print { display: none !important; }
+      .container { width: 100%; }
+      .layout { display: block; padding: 0; }
+      #report { display: block !important; border: 0; background: white; padding: 0; }
+      #report * { color: #172033 !important; }
+      .report-head, .finding, .stat { background: white; border-color: #ddd; }
+      .finding { break-inside: avoid; }
+      .stats { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">Lead<span>Leak</span></div>
+      <div class="tag">WEBSITE CONVERSION AUDITS</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow">Find friction. Recommend fixes.</div>
+      <h1>Turn website problems into <span>clear action.</span></h1>
+      <p class="intro">
+        Build a practical website audit with evidence-backed findings,
+        prioritized recommendations, and a report you can share with a client.
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="panel" id="editor">
+        <h2>Create an audit</h2>
+        <p class="sub">Enter the business details, then add issues you have verified.</p>
+
+        <form id="businessForm">
+          <div class="field">
+            <label for="business">Business name</label>
+            <input id="business" placeholder="e.g. Coastline Fitness" required>
+          </div>
+
+          <div class="field">
+            <label for="website">Website URL</label>
+            <input id="website" type="url" placeholder="https://example.com" required>
+          </div>
+
+          <div class="field">
+            <label for="auditor">Prepared by</label>
+            <input id="auditor" placeholder="Your name or studio">
+          </div>
+
+          <button class="button full" type="submit">Update report details</button>
+        </form>
+
+        <div class="notice">
+          Important: LeadLeak does not automatically scan a website in this
+          version. Inspect the website yourself and record only findings
+          supported by evidence.
+        </div>
+
+        <div style="height:1px;background:var(--border);margin:25px 0"></div>
+
+        <h2>Add a finding</h2>
+        <p class="sub">Each finding should describe a real observation and a practical fix.</p>
+
+        <form id="findingForm">
+          <div class="field">
+            <label for="issueTitle">Finding title</label>
+            <input id="issueTitle" placeholder="e.g. Booking button leads to an error" required>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="category">Category</label>
+              <select id="category">
+                <option>Contact and booking</option>
+                <option>Calls to action</option>
+                <option>Mobile usability</option>
+                <option>Broken links</option>
+                <option>Forms</option>
+                <option>Clarity and navigation</option>
+                <option>Performance</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="severity">Priority</label>
+              <select id="severity">
+                <option value="high">High</option>
+                <option value="medium" selected>Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="page">Page or location</label>
+            <input id="page" placeholder="e.g. Homepage, top navigation">
+          </div>
+
+          <div class="field">
+            <label for="evidence">Evidence — what did you observe?</label>
+            <textarea id="evidence" placeholder="Describe the exact behavior or visible issue." required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="impact">Potential customer impact</label>
+            <textarea id="impact" placeholder="Explain how this could create friction. Avoid claiming unmeasured revenue loss." required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="recommendation">Recommended fix</label>
+            <textarea id="recommendation" placeholder="Give the business a concrete next step." required></textarea>
+          </div>
+
+          <button class="button full" type="submit">+ Add finding to report</button>
+        </form>
+
+        <div class="findings" id="findingList"></div>
+
+        <div class="actions">
+          <button class="button secondary" id="downloadBtn" type="button">Download report</button>
+          <button class="button secondary" id="printBtn" type="button">Print / Save PDF</button>
+          <button class="button danger" id="clearBtn" type="button">Clear audit</button>
+        </div>
+        <div id="status" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="panel" id="report">
+        <div class="report-head">
+          <div class="eyebrow">Audit report</div>
+          <h2 id="reportBusiness" style="font-size:25px;margin-top:10px">Your business report</h2>
+          <div class="report-url" id="reportWebsite">Your website URL will appear here.</div>
+          <p class="sub" style="margin:12px 0 0">
+            Prepared by <span id="reportAuditor">LeadLeak</span>
+            · <span id="reportDate"></span>
+          </p>
+        </div>
+
+        <h3>Audit overview</h3>
+        <p class="sub">A summary of the findings recorded during this review.</p>
+
+        <div class="stats">
+          <div class="stat"><strong id="totalCount">0</strong><span>FINDINGS</span></div>
+          <div class="stat"><strong id="highCount">0</strong><span>HIGH PRIORITY</span></div>
+          <div class="stat"><strong id="mediumCount">0</strong><span>MEDIUM PRIORITY</span></div>
+        </div>
+
+        <div class="report-section">
+          <h3>Priority recommendations</h3>
+          <div id="reportFindings">
+            <div class="empty">Add verified findings to build your report.</div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h3>Suggested next steps</h3>
+          <ul>
+            <li>Address verified high-priority issues first.</li>
+            <li>Retest each affected page or user journey after making changes.</li>
+            <li>Use analytics or conversion data where available to measure results.</li>
+          </ul>
+        </div>
+
+        <div class="notice">
+          Scope note: This report documents observations supplied by the auditor.
+          Potential impacts are hypotheses unless supported by business data.
+          No revenue recovery is guaranteed.
+        </div>
+
+        <p class="sub" style="margin-top:22px">Prepared with LeadLeak · Website Conversion Audit</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      LeadLeak is an independent audit tool prototype. Reports are generated
+      locally in your browser; this version does not save client data to a server.
+    </div>
+  </footer>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    let findings = [];
+
+    const business = {
+      name: "",
+      website: "",
+      auditor: ""
+    };
+
+    const today = new Intl.DateTimeFormat("en", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }).format(new Date());
+
+    $("reportDate").textContent = today;
+
+    function safeWebsite(value) {
+      try {
+        const url = new URL(value);
+        if (url.protocol !== "https:" && url.protocol !== "http:") {
+          return "";
+        }
+        return url.href;
+      } catch {
+        return "";
+      }
+    }
+
+    function readBusinessForm() {
+      const website = safeWebsite($("website").value.trim());
+
+      if (!website) {
+        $("status").textContent = "Enter a valid HTTP or HTTPS website URL.";
+        return false;
+      }
+
+      business.name = $("business").value.trim();
+      business.website = website;
+      business.auditor = $("auditor").value.trim() || "LeadLeak";
+
+      render();
+      $("status").textContent = "Report details updated.";
+      return true;
+    }
+
+    $("businessForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      readBusinessForm();
+    });
+
+    $("findingForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const title = $("issueTitle").value.trim();
+      const evidence = $("evidence").value.trim();
+      const impact = $("impact").value.trim();
+      const recommendation = $("recommendation").value.trim();
+
+      if (!title || !evidence || !impact || !recommendation) {
+        $("status").textContent = "Complete all required finding fields.";
+        return;
+      }
+
+      findings.push({
+        id: Date.now() + Math.random(),
+        title,
+        category: $("category").value,
+        severity: $("severity").value,
+        page: $("page").value.trim() || "Not specified",
+        evidence,
+        impact,
+        recommendation
+      });
+
+      $("findingForm").reset();
+      $("severity").value = "medium";
+      render();
+      $("status").textContent = "Finding added to the report.";
+    });
+
+    function makeElement(tag, className, text) {
+      const el = document.createElement(tag);
+      if (className) el.className = className;
+      if (text !== undefined) el.textContent = text;
+      return el;
+    }
+
+    function renderFindingCard(item, includeDelete) {
+      const card = makeElement("article", "finding");
+      const top = makeElement("div", "finding-top");
+      const title = makeElement("div", "finding-title", item.title);
+      const severity = makeElement(
+        "span",
+        "severity " + item.severity,
+        item.severity + " priority"
+      );
+
+      top.append(title, severity);
+      card.append(top);
+
+      card.append(makeElement("p", "", item.category + " · " + item.page));
+
+      const details = [
+        ["Evidence", item.evidence],
+        ["Potential impact", item.impact],
+        ["Recommended fix", item.recommendation]
+      ];
+
+      details.forEach(([label, value]) => {
+        const p = makeElement("p");
+        const strong = makeElement("strong", "", label + ": ");
+        p.append(strong, document.createTextNode(value));
+        card.append(p);
+      });
+
+      if (includeDelete) {
+        const remove = makeElement("button", "button danger", "Remove");
+        remove.type = "button";
+        remove.addEventListener("click", () => {
+          findings = findings.filter((finding) => finding.id !== item.id);
+          render();
+          $("status").textContent = "Finding removed.";
+        });
+        const actions = makeElement("div", "actions");
+        actions.append(remove);
+        card.append(actions);
+      }
+
+      return card;
+    }
+
+    function render() {
+      $("reportBusiness").textContent = business.name || "Your business report";
+      $("reportWebsite").textContent = business.website || "Your website URL will appear here.";
+      $("reportAuditor").textContent = business.auditor || "LeadLeak";
+
+      $("totalCount").textContent = findings.length;
+      $("highCount").textContent = findings.filter((f) => f.severity === "high").length;
+      $("mediumCount").textContent = findings.filter((f) => f.severity === "medium").length;
+
+      const list = $("findingList");
+      const reportList = $("reportFindings");
+
+      list.replaceChildren();
+      reportList.replaceChildren();
+
+      if (findings.length === 0) {
+        list.append(makeElement("div", "empty", "No findings added yet."));
+        reportList.append(makeElement("div", "empty", "Add verified findings to build your report."));
+        return;
+      }
+
+      const sorted = [...findings].sort((a, b) => {
+        const rank = { high: 0, medium: 1, low: 2 };
+        return rank[a.severity] - rank[b.severity];
+      });
+
+      sorted.forEach((item) => {
+        list.append(renderFindingCard(item, true));
+        reportList.append(renderFindingCard(item, false));
+      });
+    }
+
+    function reportAsText() {
+      const lines = [
+        "LEADLEAK — WEBSITE CONVERSION AUDIT",
+        "Business: " + (business.name || "Not specified"),
+        "Website: " + (business.website || "Not specified"),
+        "Prepared by: " + (business.auditor || "LeadLeak"),
+        "Date: " + today,
+        "",
+        "SUMMARY",
+        "Total findings: " + findings.length,
+        "High priority: " + findings.filter((f) => f.severity === "high").length,
+        "Medium priority: " + findings.filter((f) => f.severity === "medium").length,
+        "",
+        "FINDINGS",
+        ""
+      ];
+
+      findings.forEach((item, index) => {
+        lines.push(
+          (index + 1) + ". " + item.title,
+          "Priority: " + item.severity.toUpperCase(),
+          "Category: " + item.category,
+          "Page: " + item.page,
+          "Evidence: " + item.evidence,
+          "Potential impact: " + item.impact,
+          "Recommended fix: " + item.recommendation,
+          ""
+        );
+      });
+
+      lines.push(
+        "DISCLAIMER",
+        "Potential impacts are hypotheses unless supported by business data.",
+        "No revenue recovery is guaranteed."
+      );
+
+      return lines.join("\n");
+    }
+
+    $("downloadBtn").addEventListener("click", () => {
+      if (!business.name || !business.website) {
+        $("status").textContent = "Add the business name and website first.";
+        return;
+      }
+
+      if (findings.length === 0) {
+        $("status").textContent = "Add at least one finding before downloading.";
+        return;
+      }
+
+      const blob = new Blob([reportAsText()], {
+        type: "text/plain;charset=utf-8"
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "leadleak-audit.txt";
+      link.click();
+      URL.revokeObjectURL(url);
+
+      $("status").textContent = "Report downloaded.";
+    });
+
+    $("printBtn").addEventListener("click", () => {
+      if (!business.name || !business.website) {
+        $("status").textContent = "Add the business name and website first.";
+        return;
+      }
+
+      if (findings.length === 0) {
+        $("status").textContent = "Add at least one finding before printing.";
+        return;
+      }
+
+      window.print();
+    });
+
+    $("clearBtn").addEventListener("click", () => {
+      if (!confirm("Clear all business details and findings?")) return;
+
+      findings = [];
+      business.name = "";
+      business.website = "";
+      business.auditor = "";
+
+      $("businessForm").reset();
+      $("findingForm").reset();
+      $("severity").value = "medium";
+      $("status").textContent = "Audit cleared.";
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
